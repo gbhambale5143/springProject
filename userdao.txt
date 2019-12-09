@@ -1,0 +1,39 @@
+package com.cdac;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
+
+@Component
+public class UserDao {
+ @Autowired
+	private JdbcTemplate jdbcTemplate;
+	public  Boolean create(User user) {
+		
+		String sql="INSERT INTO HIBERNATE_USER(USERNAME,PASSWORD,EMAIL,MOBILE) VALUES(?,?,?,?)";
+		jdbcTemplate.update(sql,user.getUsername(),user.getPassword(),user.getEmail(),user.getMobile());
+		return true;
+		
+		
+	}
+	
+	
+	public Boolean validateUser(User user) {
+		String sql = "SELECT * FROM HIBERNATE_USER WHERE USERNAME=? AND PASSWORD=?";
+User dbuser =jdbcTemplate.queryForObject(sql, new Object[]{user.getUsername(),user.getPassword()}, new UserRowMapp());
+	
+		   if(dbuser==null)
+		   {
+			   return false;
+		   }
+		   
+		   return true;
+	
+	}
+	
+	
+	
+	
+	
+	
+}
